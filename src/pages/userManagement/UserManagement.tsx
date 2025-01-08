@@ -1,134 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { useAtom } from 'jotai';
-import { User } from '../../types/User';
-import { fetchUsers, deleteUser } from '../../services/userService';
-import { getCurrentUser } from '../../services/authService';
-import { currentPageAtom, searchTermAtom } from '../../atoms';
-import { useDebounce } from 'use-debounce';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React from 'react';
 import {
   Layout,
-  Menu,
-  Input,
-  Table,
-  Pagination,
   Spin,
   Empty,
   Popconfirm,
   Button,
+  Menu,
+  Input,
+  Table,
+  Pagination,
 } from 'antd';
 import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useFetchCurrentUser from './hooks/useFetchCurrentUser';
+import useFetchUsers from './hooks/useFetchUsers';
+import useUserManagement from './hooks/useUserManagement';
+import { User } from '../../types/User';
 
 const { Header, Content, Footer } = Layout;
 
 const UserManagement: React.FC = () => {
-  const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
-  const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
-  const navigate = useNavigate();
-
-  const limit = 10;
-
-  // Fetch current user when the component mounts
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const accessToken = localStorage.getItem('accessToken');
-
-      if (accessToken) {
-        try {
-          const currentUser = await getCurrentUser(accessToken);
-          console.log('Current User:', currentUser);
-        } catch (error) {
-          console.error('Error fetching current user:', error);
-          toast.error('Failed to fetch current user. Please log in again.');
-          navigate('/login'); // Redirect to login page if fetching current user fails
-        }
-      } else {
-        toast.error('No access token found. Please log in.');
-        navigate('/login'); // Redirect to login page if no access token is found
-      }
-    };
-
-    fetchCurrentUser();
-  }, [navigate]);
-
-  // Fetch users when the component mounts
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const users = await fetchUsers();
-        setAllUsers(users);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Update search term from URL parameters
-  useEffect(() => {
-    const search = searchParams.get('search') || '';
-    setSearchTerm(search);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
-  // Filter and paginate users based on search term and current page
-  useEffect(() => {
-    const filteredUsers = allUsers.filter(
-      (user) =>
-        user.firstName
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()) ||
-        user.lastName
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-    );
-    setTotalPages(Math.ceil(filteredUsers.length / limit));
-    const startIndex = (currentPage - 1) * limit;
-    const paginatedUsers = filteredUsers.slice(startIndex, startIndex + limit);
-    setUsers(paginatedUsers);
-  }, [allUsers, debouncedSearchTerm, currentPage]);
-
-  // Handle search input change
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setCurrentPage(1);
-    if (value) {
-      setSearchParams({ search: value });
-    } else {
-      setSearchParams({});
-    }
-  };
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  // Handle delete user
-  const handleDelete = async (userId: number) => {
-    try {
-      await deleteUser(userId);
-      setAllUsers(allUsers.filter((user) => user.id !== userId));
-      toast.success('User deleted successfully');
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      toast.error('Failed to delete user');
-    }
-  };
+  useFetchCurrentUser();
+  const { allUsers, setAllUsers, loading } = useFetchUsers();
+  const {
+    users,
+    totalPages,
+    currentPage,
+    searchTerm,
+    handleSearchChange,
+    handlePageChange,
+    handleDelete,
+  } = useUserManagement(allUsers, setAllUsers);
 
   const columns = [
     {
@@ -169,12 +72,7 @@ const UserManagement: React.FC = () => {
     },
   ];
 
-  const menuItems = [
-    {
-      key: '1',
-      label: 'User Management',
-    },
-  ];
+  const limit = 10;
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -184,7 +82,7 @@ const UserManagement: React.FC = () => {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['1']}
-          items={menuItems}
+          items={[{ key: '1', label: 'User Management' }]}
         />
       </Header>
       <Content
