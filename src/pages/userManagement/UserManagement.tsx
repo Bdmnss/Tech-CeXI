@@ -93,6 +93,10 @@ const UserManagement: React.FC = () => {
       />
       {loading ? (
         <div>Loading...</div>
+      ) : users.length === 0 ? (
+        <div className="mt-10 text-center text-2xl text-gray-500">
+          No results
+        </div>
       ) : (
         <div className="mt-4 overflow-x-auto scroll-smooth">
           <table className="mt-4 min-w-full border border-gray-300 bg-white">
@@ -123,25 +127,27 @@ const UserManagement: React.FC = () => {
           </table>
         </div>
       )}
-      <div className="mt-4 flex justify-between">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="rounded bg-gray-300 px-4 py-2"
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="rounded bg-gray-300 px-4 py-2"
-        >
-          Next
-        </button>
-      </div>
+      {users.length > 0 && (
+        <div className="mt-4 flex justify-between">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="rounded bg-gray-300 px-4 py-2"
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="rounded bg-gray-300 px-4 py-2"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
