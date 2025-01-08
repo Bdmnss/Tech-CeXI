@@ -1,9 +1,8 @@
-// filepath: /Users/lukabadali/Desktop/Tech-CeXI/src/components/Input.tsx
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 interface InputProps {
-  label: string;
+  label?: string;
   name: string;
   type?: string;
   value: string;
@@ -13,6 +12,7 @@ interface InputProps {
   touched?: boolean;
   isPassword?: boolean;
   placeholder?: string;
+  className?: string;
 }
 
 const Input: React.FC<InputProps> = ({
