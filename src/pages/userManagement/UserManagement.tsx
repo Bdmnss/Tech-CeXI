@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { User } from '../../types/User';
 import axiosInstance from '../../services/axiosInstance';
-import Input from '../../components/Input';
 import { currentPageAtom, searchTermAtom } from '../../atoms';
 import { useDebounce } from 'use-debounce';
 import { useSearchParams } from 'react-router-dom';
+import { Layout, Menu, Input, Table, Pagination, Spin, Empty } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+
+const { Header, Content, Footer } = Layout;
 
 const UserManagement: React.FC = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -79,76 +82,95 @@ const UserManagement: React.FC = () => {
     setCurrentPage(page);
   };
 
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      render: (_text: string, record: User) =>
+        `${record.firstName} ${record.lastName}`,
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+    },
+    {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+    },
+  ];
+
+  const menuItems = [
+    {
+      key: '1',
+      label: 'User Management',
+    },
+  ];
+
   return (
-    <div className="p-4">
-      <h1 className="mb-4 text-2xl font-bold">User Management</h1>
-      <Input
-        name="search"
-        type="text"
-        value={searchTerm}
-        onChange={handleSearchChange}
-        onBlur={() => {}}
-        placeholder="Search users..."
-        className="mb-4 w-full rounded border p-2"
-      />
-      {loading ? (
-        <div>Loading...</div>
-      ) : users.length === 0 ? (
-        <div className="mt-10 text-center text-2xl text-gray-500">
-          No results
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header>
+        <div className="logo" />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={['1']}
+          items={menuItems}
+        />
+      </Header>
+      <Content
+        className="responsive-content"
+        style={{ padding: '0 50px', marginTop: 64 }}
+      >
+        <div
+          className="site-layout-content"
+          style={{ padding: 24, minHeight: 380 }}
+        >
+          <h1 className="mb-4 text-2xl font-bold">User Management</h1>
+          <Input
+            placeholder="Search users..."
+            prefix={<SearchOutlined />}
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{ marginBottom: 20, width: '100%' }}
+          />
+          {loading ? (
+            <Spin size="large" />
+          ) : users.length === 0 ? (
+            <Empty description="No results" />
+          ) : (
+            <>
+              <div className="table-container">
+                <Table
+                  columns={columns}
+                  dataSource={users}
+                  rowKey="id"
+                  pagination={false}
+                  scroll={{ x: 'max-content' }}
+                />
+              </div>
+              <Pagination
+                current={currentPage}
+                total={totalPages * limit}
+                pageSize={limit}
+                onChange={handlePageChange}
+                style={{ marginTop: 20, textAlign: 'center' }}
+              />
+            </>
+          )}
         </div>
-      ) : (
-        <div className="mt-4 overflow-x-auto scroll-smooth">
-          <table className="mt-4 min-w-full border border-gray-300 bg-white">
-            <thead>
-              <tr>
-                <th className="border-b border-gray-300 px-4 py-2">Name</th>
-                <th className="border-b border-gray-300 px-4 py-2">Email</th>
-                <th className="border-b border-gray-300 px-4 py-2">Age</th>
-                <th className="border-b border-gray-300 px-4 py-2">Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-100">
-                  <td className="border-b border-gray-300 px-4 py-2">{`${user.firstName} ${user.lastName}`}</td>
-                  <td className="border-b border-gray-300 px-4 py-2">
-                    {user.email}
-                  </td>
-                  <td className="border-b border-gray-300 px-4 py-2">
-                    {user.age}
-                  </td>
-                  <td className="border-b border-gray-300 px-4 py-2">
-                    {user.role}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {users.length > 0 && (
-        <div className="mt-4 flex justify-between">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="rounded bg-gray-300 px-4 py-2"
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="rounded bg-gray-300 px-4 py-2"
-          >
-            Next
-          </button>
-        </div>
-      )}
-    </div>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>
+        User Management Dashboard ©2023
+      </Footer>
+    </Layout>
   );
 };
 
