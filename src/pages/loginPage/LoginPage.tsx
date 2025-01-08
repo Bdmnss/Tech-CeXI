@@ -12,17 +12,27 @@ const LoginPage: React.FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
     },
     validationSchema: loginSchema,
     onSubmit: async (values) => {
       try {
-        const user = await authenticateUser(values.email, values.password);
-        if (user) {
+        const authResponse = await authenticateUser(
+          values.username,
+          values.password
+        );
+        if (
+          authResponse &&
+          authResponse.accessToken &&
+          authResponse.refreshToken
+        ) {
+          localStorage.setItem('accessToken', authResponse.accessToken);
+          localStorage.setItem('refreshToken', authResponse.refreshToken);
+
           navigate('/users');
         } else {
-          toast.error('Invalid email or password');
+          toast.error('Invalid username or password');
         }
       } catch (error) {
         if (error instanceof Error) {
@@ -40,15 +50,15 @@ const LoginPage: React.FC = () => {
         <h2 className="mb-10 text-center text-2xl font-bold md:mb-6">Login</h2>
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
           <Input
-            label="Email"
-            name="email"
-            type="email"
-            value={formik.values.email}
+            label="Username"
+            name="username"
+            type="text"
+            value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.errors.email}
-            touched={formik.touched.email}
-            placeholder="Enter your email"
+            error={formik.errors.username}
+            touched={formik.touched.username}
+            placeholder="Enter your username"
           />
           <Input
             label="Password"

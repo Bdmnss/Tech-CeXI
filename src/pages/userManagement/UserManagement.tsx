@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { User } from '../../types/User';
 import { fetchUsers, deleteUser } from '../../services/userService';
+import { getCurrentUser } from '../../services/authService';
 import { currentPageAtom, searchTermAtom } from '../../atoms';
 import { useDebounce } from 'use-debounce';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Layout,
   Menu,
@@ -31,8 +32,32 @@ const UserManagement: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+  const navigate = useNavigate();
 
   const limit = 10;
+
+  // Fetch current user when the component mounts
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (accessToken) {
+        try {
+          const currentUser = await getCurrentUser(accessToken);
+          console.log('Current User:', currentUser);
+        } catch (error) {
+          console.error('Error fetching current user:', error);
+          toast.error('Failed to fetch current user. Please log in again.');
+          navigate('/login'); // Redirect to login page if fetching current user fails
+        }
+      } else {
+        toast.error('No access token found. Please log in.');
+        navigate('/login'); // Redirect to login page if no access token is found
+      }
+    };
+
+    fetchCurrentUser();
+  }, [navigate]);
 
   // Fetch users when the component mounts
   useEffect(() => {
