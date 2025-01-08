@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { User } from '../../types/User';
-import axiosInstance from '../../services/axiosInstance';
+import { fetchUsers, deleteUser } from '../../services/userService';
 import { currentPageAtom, searchTermAtom } from '../../atoms';
 import { useDebounce } from 'use-debounce';
 import { useSearchParams } from 'react-router-dom';
-import { Layout, Menu, Input, Table, Pagination, Spin, Empty } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import {
+  Layout,
+  Menu,
+  Input,
+  Table,
+  Pagination,
+  Spin,
+  Empty,
+  Popconfirm,
+  Button,
+} from 'antd';
+import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Header, Content, Footer } = Layout;
 
@@ -22,22 +34,21 @@ const UserManagement: React.FC = () => {
 
   const limit = 10;
 
-  // Fetch users from the API
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      const response = await axiosInstance.get('/users');
-      setAllUsers(response.data.users);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Fetch users when the component mounts
   useEffect(() => {
-    fetchUsers();
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const users = await fetchUsers();
+        setAllUsers(users);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // Update search term from URL parameters
@@ -82,6 +93,18 @@ const UserManagement: React.FC = () => {
     setCurrentPage(page);
   };
 
+  // Handle delete user
+  const handleDelete = async (userId: number) => {
+    try {
+      await deleteUser(userId);
+      setAllUsers(allUsers.filter((user) => user.id !== userId));
+      toast.success('User deleted successfully');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
+    }
+  };
+
   const columns = [
     {
       title: 'Name',
@@ -104,6 +127,20 @@ const UserManagement: React.FC = () => {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_text: string, record: User) => (
+        <Popconfirm
+          title="Are you sure to delete this user?"
+          onConfirm={() => handleDelete(record.id)}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button type="primary" danger icon={<DeleteOutlined />} />
+        </Popconfirm>
+      ),
     },
   ];
 
@@ -170,6 +207,7 @@ const UserManagement: React.FC = () => {
       <Footer style={{ textAlign: 'center' }}>
         User Management Dashboard ©2023
       </Footer>
+      <ToastContainer />
     </Layout>
   );
 };
