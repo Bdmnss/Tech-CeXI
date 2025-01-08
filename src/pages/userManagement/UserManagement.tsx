@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   Layout,
+  Menu,
   Spin,
   Empty,
   Popconfirm,
   Button,
-  Menu,
-  Input,
   Table,
   Pagination,
+  Input,
 } from 'antd';
 import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { ToastContainer } from 'react-toastify';
@@ -31,6 +31,7 @@ const UserManagement: React.FC = () => {
     handleSearchChange,
     handlePageChange,
     handleDelete,
+    handleLogout,
   } = useUserManagement(allUsers, setAllUsers);
 
   const columns = [
@@ -84,6 +85,13 @@ const UserManagement: React.FC = () => {
           defaultSelectedKeys={['1']}
           items={[{ key: '1', label: 'User Management' }]}
         />
+        <Button
+          type="primary"
+          onClick={handleLogout}
+          style={{ float: 'right', marginTop: '16px' }}
+        >
+          Log Out
+        </Button>
       </Header>
       <Content
         className="responsive-content"

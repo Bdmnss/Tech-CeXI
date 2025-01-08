@@ -6,6 +6,7 @@ import { currentPageAtom, searchTermAtom } from '../../../atoms';
 import { useDebounce } from 'use-debounce';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const useUserManagement = (
   allUsers: User[],
@@ -17,6 +18,7 @@ const useUserManagement = (
   const [totalPages, setTotalPages] = useState<number>(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+  const navigate = useNavigate();
 
   const limit = 10;
 
@@ -71,6 +73,12 @@ const useUserManagement = (
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    navigate('/login');
+  };
+
   return {
     users,
     totalPages,
@@ -79,6 +87,7 @@ const useUserManagement = (
     handleSearchChange,
     handlePageChange,
     handleDelete,
+    handleLogout,
   };
 };
 
