@@ -18,8 +18,8 @@ import useFetchUsers from '../../hooks/useFetchUsers';
 import useUserManagement from '../../hooks/useUserManagement';
 import useAddUser from '../../hooks/useAddUser';
 import useUpdateUser from '../../hooks/useUpdateUser';
-import AddUserModal from './components/AddUserModal';
-import UpdateUserModal from './components/UpdateUserModal';
+import AddUserModal from '../../modals/AddUserModal';
+import UpdateUserModal from '../../modals/UpdateUserModal';
 import { User } from '../../types/User';
 
 const { Header, Content, Footer } = Layout;
