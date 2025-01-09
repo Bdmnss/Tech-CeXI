@@ -17,7 +17,9 @@ import useFetchCurrentUser from './hooks/useFetchCurrentUser';
 import useFetchUsers from './hooks/useFetchUsers';
 import useUserManagement from './hooks/useUserManagement';
 import useAddUser from './hooks/useAddUser';
+import useUpdateUser from './hooks/useUpdateUser';
 import AddUserModal from './components/AddUserModal';
+import UpdateUserModal from './components/UpdateUserModal';
 import { User } from '../../types/User';
 
 const { Header, Content, Footer } = Layout;
@@ -36,8 +38,21 @@ const UserManagement: React.FC = () => {
     handleLogout,
   } = useUserManagement(allUsers, setAllUsers);
 
-  const { isModalVisible, showModal, handleOk, handleCancel, form } =
-    useAddUser(setAllUsers, allUsers);
+  const {
+    isAddModalVisible,
+    showAddModal,
+    handleAddOk,
+    handleAddCancel,
+    addForm,
+  } = useAddUser(setAllUsers, allUsers);
+
+  const {
+    isUpdateModalVisible,
+    showUpdateModal,
+    handleUpdateOk,
+    handleUpdateCancel,
+    updateForm,
+  } = useUpdateUser(setAllUsers, allUsers);
 
   const columns = [
     {
@@ -66,14 +81,19 @@ const UserManagement: React.FC = () => {
       title: 'Action',
       key: 'action',
       render: (_text: string, record: User) => (
-        <Popconfirm
-          title="Are you sure to delete this user?"
-          onConfirm={() => handleDelete(record.id)}
-          okText="Yes"
-          cancelText="No"
-        >
-          <Button type="primary" danger icon={<DeleteOutlined />} />
-        </Popconfirm>
+        <>
+          <Button type="link" onClick={() => showUpdateModal(record)}>
+            Edit
+          </Button>
+          <Popconfirm
+            title="Are you sure to delete this user?"
+            onConfirm={() => handleDelete(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" danger icon={<DeleteOutlined />} />
+          </Popconfirm>
+        </>
       ),
     },
   ];
@@ -100,7 +120,7 @@ const UserManagement: React.FC = () => {
         </Button>
         <Button
           type="primary"
-          onClick={showModal}
+          onClick={showAddModal}
           style={{ float: 'right', marginTop: '16px', marginRight: '10px' }}
         >
           Add User
@@ -153,10 +173,16 @@ const UserManagement: React.FC = () => {
       </Footer>
       <ToastContainer />
       <AddUserModal
-        isModalVisible={isModalVisible}
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        form={form}
+        isModalVisible={isAddModalVisible}
+        handleOk={handleAddOk}
+        handleCancel={handleAddCancel}
+        form={addForm}
+      />
+      <UpdateUserModal
+        isVisible={isUpdateModalVisible}
+        onConfirm={handleUpdateOk}
+        onCancel={handleUpdateCancel}
+        form={updateForm}
       />
     </Layout>
   );

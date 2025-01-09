@@ -92,6 +92,23 @@ const useUserManagement = (
     }
   };
 
+  const handleUpdateUser = async (
+    userId: number,
+    updatedUser: Partial<User>
+  ) => {
+    try {
+      const response = await axiosInstance.put(`/users/${userId}`, updatedUser);
+      const updatedUserData = response.data;
+      setAllUsers(
+        allUsers.map((user) => (user.id === userId ? updatedUserData : user))
+      );
+      toast.success('User updated successfully');
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast.error('Failed to update user');
+    }
+  };
+
   return {
     users,
     totalPages,
@@ -102,6 +119,7 @@ const useUserManagement = (
     handleDelete,
     handleLogout,
     handleAddUser,
+    handleUpdateUser,
   };
 };
 
