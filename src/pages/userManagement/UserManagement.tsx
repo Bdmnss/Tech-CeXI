@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import useFetchCurrentUser from './hooks/useFetchCurrentUser';
 import useFetchUsers from './hooks/useFetchUsers';
 import useUserManagement from './hooks/useUserManagement';
+import useAddUser from './hooks/useAddUser';
+import AddUserModal from './components/AddUserModal';
 import { User } from '../../types/User';
 
 const { Header, Content, Footer } = Layout;
@@ -33,6 +35,9 @@ const UserManagement: React.FC = () => {
     handleDelete,
     handleLogout,
   } = useUserManagement(allUsers, setAllUsers);
+
+  const { isModalVisible, showModal, handleOk, handleCancel, form } =
+    useAddUser(setAllUsers, allUsers);
 
   const columns = [
     {
@@ -87,10 +92,18 @@ const UserManagement: React.FC = () => {
         />
         <Button
           type="primary"
+          danger
           onClick={handleLogout}
           style={{ float: 'right', marginTop: '16px' }}
         >
           Log Out
+        </Button>
+        <Button
+          type="primary"
+          onClick={showModal}
+          style={{ float: 'right', marginTop: '16px', marginRight: '10px' }}
+        >
+          Add User
         </Button>
       </Header>
       <Content
@@ -139,6 +152,12 @@ const UserManagement: React.FC = () => {
         User Management Dashboard ©2023
       </Footer>
       <ToastContainer />
+      <AddUserModal
+        isModalVisible={isModalVisible}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        form={form}
+      />
     </Layout>
   );
 };

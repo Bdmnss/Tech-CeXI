@@ -7,6 +7,7 @@ import { useDebounce } from 'use-debounce';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../../services/axiosInstance';
 
 const useUserManagement = (
   allUsers: User[],
@@ -79,6 +80,18 @@ const useUserManagement = (
     navigate('/login');
   };
 
+  const handleAddUser = async (newUser: Partial<User>) => {
+    try {
+      const response = await axiosInstance.post('/users/add', newUser);
+      const addedUser = response.data;
+      setAllUsers([...allUsers, addedUser]);
+      toast.success('User added successfully');
+    } catch (error) {
+      console.error('Error adding user:', error);
+      toast.error('Failed to add user');
+    }
+  };
+
   return {
     users,
     totalPages,
@@ -88,6 +101,7 @@ const useUserManagement = (
     handlePageChange,
     handleDelete,
     handleLogout,
+    handleAddUser,
   };
 };
 
