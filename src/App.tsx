@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/loginPage/LoginPage';
 import UserManagement from './pages/userManagement/UserManagement';
+import MyAccount from './pages/myAccount/MyAccount';
 import ProtectedRoute from './guards/ProtectedRoute';
 import PublicRoute from './guards/PublicRoute';
 import './App.css';
@@ -17,6 +18,10 @@ function App() {
         <Route
           path="/users"
           element={<ProtectedRoute element={<UserManagement />} />}
+        />
+        <Route
+          path="/my-account"
+          element={<ProtectedRoute element={<MyAccount />} />}
         />
       </Routes>
     </div>

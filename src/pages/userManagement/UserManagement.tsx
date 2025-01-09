@@ -13,11 +13,11 @@ import {
 import { DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useFetchCurrentUser from './hooks/useFetchCurrentUser';
-import useFetchUsers from './hooks/useFetchUsers';
-import useUserManagement from './hooks/useUserManagement';
-import useAddUser from './hooks/useAddUser';
-import useUpdateUser from './hooks/useUpdateUser';
+import { useNavigate } from 'react-router-dom';
+import useFetchUsers from '../../hooks/useFetchUsers';
+import useUserManagement from '../../hooks/useUserManagement';
+import useAddUser from '../../hooks/useAddUser';
+import useUpdateUser from '../../hooks/useUpdateUser';
 import AddUserModal from './components/AddUserModal';
 import UpdateUserModal from './components/UpdateUserModal';
 import { User } from '../../types/User';
@@ -25,7 +25,7 @@ import { User } from '../../types/User';
 const { Header, Content, Footer } = Layout;
 
 const UserManagement: React.FC = () => {
-  useFetchCurrentUser();
+  const navigate = useNavigate();
   const { allUsers, setAllUsers, loading } = useFetchUsers();
   const {
     users,
@@ -52,7 +52,7 @@ const UserManagement: React.FC = () => {
     handleUpdateOk,
     handleUpdateCancel,
     updateForm,
-  } = useUpdateUser(setAllUsers, allUsers);
+  } = useUpdateUser();
 
   const columns = [
     {
@@ -108,7 +108,18 @@ const UserManagement: React.FC = () => {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['1']}
-          items={[{ key: '1', label: 'User Management' }]}
+          items={[
+            {
+              key: '1',
+              label: 'User Management',
+              onClick: () => navigate('/users'),
+            },
+            {
+              key: '2',
+              label: 'My Account',
+              onClick: () => navigate('/my-account'),
+            },
+          ]}
         />
         <Button
           type="primary"

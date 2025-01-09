@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { User } from '../../../types/User';
-import axiosInstance from '../../../services/axiosInstance';
+import { User } from '../types/User';
+import axiosInstance from '../services/axiosInstance';
 import { toast } from 'react-toastify';
 import { Form } from 'antd';
 

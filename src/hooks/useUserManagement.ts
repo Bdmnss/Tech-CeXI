@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
-import { User } from '../../../types/User';
-import { deleteUser } from '../../../services/userService';
-import { currentPageAtom, searchTermAtom } from '../../../atoms';
+import { User } from '../types/User';
+import { deleteUser } from '../services/userService';
+import { currentPageAtom, searchTermAtom } from '../atoms';
 import { useDebounce } from 'use-debounce';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../../services/axiosInstance';
+import axiosInstance from '../services/axiosInstance';
 
 const useUserManagement = (
   allUsers: User[],

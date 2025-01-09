@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../../../services/authService';
+import { getCurrentUser } from '../services/authService';
 import { toast } from 'react-toastify';
+import { User } from '../types/User';
 
 const useFetchCurrentUser = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,21 +15,26 @@ const useFetchCurrentUser = () => {
 
       if (accessToken) {
         try {
-          const currentUser = await getCurrentUser(accessToken);
-          console.log('Current User:', currentUser);
+          const user = await getCurrentUser(accessToken);
+          setCurrentUser(user);
         } catch (error) {
           console.error('Error fetching current user:', error);
           toast.error('Failed to fetch current user. Please log in again.');
           navigate('/login'); // Redirect to login page if fetching current user fails
+        } finally {
+          setLoading(false);
         }
       } else {
         toast.error('No access token found. Please log in.');
         navigate('/login'); // Redirect to login page if no access token is found
+        setLoading(false);
       }
     };
 
     fetchCurrentUser();
   }, [navigate]);
+
+  return { currentUser, loading };
 };
 
 export default useFetchCurrentUser;

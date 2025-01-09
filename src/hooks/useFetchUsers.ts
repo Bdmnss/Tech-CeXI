@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { User } from '../../../types/User';
-import { fetchUsers } from '../../../services/userService';
+import { User } from '../types/User';
+import { fetchUsers } from '../services/userService';
 
 const useFetchUsers = () => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
