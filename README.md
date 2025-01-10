@@ -1,50 +1,124 @@
-# React + TypeScript + Vite
+# Tech-CeXI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tech-CeXI** is a modern **Admin Panel website** built with TypeScript and Vite. The project features user management, authentication, and profile management functionalities. It follows a modular structure for better organization, scalability, and maintainability. This project is designed to demonstrate efficient architecture, reusable components, and best practices in web development.
 
-Currently, two official plugins are available:
+## Technologies and Libraries
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project incorporates the following technologies and libraries:
 
-## Expanding the ESLint configuration
+- **[React](https://react.dev/)**: A JavaScript library for building user interfaces.
+- **[TypeScript](https://www.typescriptlang.org/)**: A strongly typed programming language that builds on JavaScript.
+- **[Vite](https://vitejs.dev/)**: A fast and modern build tool for web projects.
+- **[Jotai](https://jotai.org/)**: A minimalistic state management library for React.
+- **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for styling.
+- **[Yup](https://github.com/jquense/yup)**: A schema validation library.
+- **[Ant Design (antd)](https://ant.design/)**: A popular UI library for React.
+- **[Axios](https://axios-http.com/)**: A promise-based HTTP client for making API requests.
+- **[Formik](https://formik.org/)**: A library for building and managing forms in React.
+- **[React-Toastify](https://fkhadra.github.io/react-toastify/)**: A library for toast notifications.
+- **[use-debounce](https://www.npmjs.com/package/use-debounce)**: A hook for handling debounced inputs.
+- **[React-DOM](https://react.dev/learn/start-a-new-react-project#react-dom)**: A package for rendering React components to the DOM.
+- **[React-Icons](https://react-icons.github.io/react-icons/)**: A library for including scalable vector icons.
+- **[React-Router-DOM](https://reactrouter.com/)**: A library for client-side routing in React.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## Table of Contents
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- [Project Structure](#project-structure)
+- [Setup and Run the Project](#setup-and-run-the-project)
+- [Login Information](#login-information)
+
+---
+
+## Project Structure
+
+The project follows a modular structure to separate concerns and ensure maintainability. Below is a high-level view of the project structure:
+
+```bash
+Tech-CeXI/
+├── public/
+├── src/
+│ ├── assets/
+│ ├── atoms/
+│ ├── components/
+│ ├── guards/
+│ ├── hooks/
+│ ├── modals/
+│ ├── pages/
+│ ├── services/
+│ ├── types/
+│ ├── validationSchemas/
+│ ├── App.css
+│ ├── App.tsx
+│ ├── index.css
+│ ├── main.tsx
+│ ├── vite-env.d.ts
+├── .env
+├── .gitignore
+├── .prettierrc
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── README.md
+├── tailwind.config.js
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+---
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Setup and Run the Project
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+### Steps
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/Bdmnss/Tech-CeXI.git
+   cd Tech-CeXI
+
+   ```
+
+2. **Create a .env file:**
+
+Create a .env file in the root directory and add the following line:
+
+```bash
+VITE_API_BASE_URL=https://dummyjson.com
+
 ```
+
+3. **Install dependencies:**
+
+Run the following command to install the required dependencies:
+
+```bash
+npm install
+
+```
+
+4. **Run the development server:**
+
+Start the development server with:
+
+```bash
+npm run dev
+
+```
+
+## Login Information
+
+To log in, you must choose a user from the JSON list available on the [DummyJSON Users API](https://dummyjson.com/users). The requests are made following the guidelines in the [DummyJSON API Documentation](https://dummyjson.com/docs/users).
