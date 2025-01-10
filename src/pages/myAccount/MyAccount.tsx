@@ -16,7 +16,6 @@ const MyAccount: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     navigate('/login');
   };
 

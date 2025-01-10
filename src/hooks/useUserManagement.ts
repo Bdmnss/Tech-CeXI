@@ -76,7 +76,6 @@ const useUserManagement = (
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     navigate('/login');
   };
 

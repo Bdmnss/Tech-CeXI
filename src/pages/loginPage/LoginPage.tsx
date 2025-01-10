@@ -22,13 +22,8 @@ const LoginPage: React.FC = () => {
           values.username,
           values.password
         );
-        if (
-          authResponse &&
-          authResponse.accessToken &&
-          authResponse.refreshToken
-        ) {
+        if (authResponse && authResponse.accessToken) {
           localStorage.setItem('accessToken', authResponse.accessToken);
-          localStorage.setItem('refreshToken', authResponse.refreshToken);
 
           navigate('/users');
         } else {

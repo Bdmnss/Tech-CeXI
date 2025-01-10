@@ -7,9 +7,8 @@ interface PublicRouteProps {
 
 const PublicRoute: React.FC<PublicRouteProps> = ({ element }) => {
   const accessToken = localStorage.getItem('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
 
-  if (accessToken && refreshToken) {
+  if (accessToken) {
     return <Navigate to="/users" replace />;
   }
 
