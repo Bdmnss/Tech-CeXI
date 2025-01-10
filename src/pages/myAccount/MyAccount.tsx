@@ -79,7 +79,7 @@ const MyAccount: React.FC = () => {
           )}
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>My Account Page ©2023</Footer>
+      <Footer style={{ textAlign: 'center' }}>My Account Page ©2025</Footer>
     </Layout>
   );
 };

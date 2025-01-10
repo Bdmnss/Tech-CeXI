@@ -21,6 +21,7 @@ import useUpdateUser from '../../hooks/useUpdateUser';
 import AddUserModal from '../../modals/AddUserModal';
 import UpdateUserModal from '../../modals/UpdateUserModal';
 import { User } from '../../types/User';
+import useFetchCurrentUser from '../../hooks/useFetchCurrentUser';
 
 const { Header, Content, Footer } = Layout;
 
@@ -53,6 +54,9 @@ const UserManagement: React.FC = () => {
     handleUpdateCancel,
     updateForm,
   } = useUpdateUser();
+
+  // checks if accessToken is valid
+  useFetchCurrentUser();
 
   const columns = [
     {
@@ -180,7 +184,7 @@ const UserManagement: React.FC = () => {
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        User Management Dashboard ©2023
+        User Management Dashboard ©2025
       </Footer>
       <ToastContainer />
       <AddUserModal
