@@ -20,7 +20,7 @@ const useAddUser = (
       try {
         const response = await axiosInstance.post('/users/add', values);
         const addedUser = response.data;
-        setAllUsers([...allUsers, addedUser]);
+        setAllUsers([addedUser, ...allUsers]);
         toast.success('User added successfully');
         setIsAddModalVisible(false);
         addForm.resetFields();

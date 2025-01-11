@@ -67,7 +67,7 @@ const useUserManagement = (
     try {
       const response = await axiosInstance.post('/users/add', newUser);
       const addedUser = response.data;
-      setAllUsers([...allUsers, addedUser]);
+      setAllUsers([addedUser, ...allUsers]);
       toast.success('User added successfully');
     } catch (error) {
       console.error('Error adding user:', error);
