@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const { Header } = Layout;
 
@@ -34,7 +35,7 @@ const AppHeader: React.FC = () => {
         type="primary"
         danger
         onClick={() => {
-          localStorage.removeItem('accessToken');
+          Cookies.remove('accessToken');
           navigate('/login');
         }}
         style={{ float: 'right', marginTop: '16px' }}

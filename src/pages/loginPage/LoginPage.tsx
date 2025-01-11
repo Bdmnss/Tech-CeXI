@@ -6,6 +6,7 @@ import { authenticateUser } from '../../services/authService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Input from '../../components/Input';
+import Cookies from 'js-cookie';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const LoginPage: React.FC = () => {
           values.password
         );
         if (authResponse && authResponse.accessToken) {
-          localStorage.setItem('accessToken', authResponse.accessToken);
+          Cookies.set('accessToken', authResponse.accessToken, { expires: 1 });
 
           navigate('/users');
         } else {
