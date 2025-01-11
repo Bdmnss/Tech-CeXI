@@ -18,7 +18,6 @@ import useUpdateUser from '../../hooks/useUpdateUser';
 import AddUserModal from '../../modals/AddUserModal';
 import UpdateUserModal from '../../modals/UpdateUserModal';
 import { User } from '../../types/User';
-import useFetchCurrentUser from '../../hooks/useFetchCurrentUser';
 
 const UserManagement: React.FC = () => {
   const { allUsers, setAllUsers, loading } = useFetchUsers();
@@ -46,10 +45,7 @@ const UserManagement: React.FC = () => {
     handleUpdateOk,
     handleUpdateCancel,
     updateForm,
-  } = useUpdateUser();
-
-  // checks if accessToken is valid
-  useFetchCurrentUser();
+  } = useUpdateUser(setAllUsers, allUsers);
 
   const columns = [
     {
