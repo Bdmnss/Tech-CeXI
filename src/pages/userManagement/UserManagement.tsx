@@ -94,11 +94,8 @@ const UserManagement: React.FC = () => {
   const limit = 10;
 
   return (
-    <div
-      className="site-layout-content"
-      style={{ padding: 24, minHeight: 380 }}
-    >
-      <div className="flex items-center justify-between">
+    <div className="user-management-container">
+      <div className="user-management-header flex items-center justify-between">
         <h1 className="mb-4 text-2xl font-bold">User Management</h1>
         <Button type="primary" onClick={showAddModal}>
           Add User

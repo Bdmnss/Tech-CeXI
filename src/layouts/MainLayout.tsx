@@ -9,8 +9,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header />
-      <Content style={{ padding: '0 50px', marginTop: 64 }}>
-        <div style={{ padding: 24 }}>{children}</div>
+      <Content className="main-layout-content">
+        <div className="main-layout-children">{children}</div>
       </Content>
       <Footer />
     </Layout>
