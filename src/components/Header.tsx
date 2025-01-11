@@ -1,20 +1,21 @@
 import React from 'react';
 import { Layout, Menu, Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const { Header } = Layout;
 
 const AppHeader: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
     {
-      key: '1',
+      key: '/users',
       label: 'User Management',
       onClick: () => navigate('/users'),
     },
     {
-      key: '2',
+      key: '/my-account',
       label: 'My Account',
       onClick: () => navigate('/my-account'),
     },
@@ -23,7 +24,12 @@ const AppHeader: React.FC = () => {
   return (
     <Header>
       <div className="logo" />
-      <Menu theme="dark" mode="horizontal" items={menuItems} />
+      <Menu
+        theme="dark"
+        mode="horizontal"
+        items={menuItems}
+        selectedKeys={[location.pathname]}
+      />
       <Button
         type="primary"
         danger
