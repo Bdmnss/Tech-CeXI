@@ -21,14 +21,12 @@ const useFetchCurrentUser = () => {
           console.error('Error fetching current user:', error);
           toast.error('Failed to fetch current user. Please log in again.');
           localStorage.removeItem('accessToken');
-          navigate('/login'); // Redirect to login page if fetching current user fails
         } finally {
           setLoading(false);
         }
       } else {
         toast.error('No access token found. Please log in.');
         localStorage.removeItem('accessToken');
-        navigate('/login'); // Redirect to login page if no access token is found
         setLoading(false);
       }
     };

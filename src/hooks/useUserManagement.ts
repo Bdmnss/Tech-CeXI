@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useAtom } from 'jotai';
 import { User } from '../types/User';
 import { deleteUser } from '../services/userService';
-import { currentPageAtom, searchTermAtom } from '../atoms';
-import { useDebounce } from 'use-debounce';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../services/axiosInstance';
 
 const useUserManagement = (
@@ -14,12 +10,10 @@ const useUserManagement = (
   setAllUsers: React.Dispatch<React.SetStateAction<User[]>>
 ) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
-  const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
   const [totalPages, setTotalPages] = useState<number>(1);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
-  const navigate = useNavigate();
 
   const limit = 10;
 
@@ -27,26 +21,21 @@ const useUserManagement = (
   useEffect(() => {
     const search = searchParams.get('search') || '';
     setSearchTerm(search);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Effect to filter and paginate users based on search term and current page
   useEffect(() => {
     const filteredUsers = allUsers.filter(
       (user) =>
-        user.firstName
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()) ||
-        user.lastName
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+        user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setTotalPages(Math.ceil(filteredUsers.length / limit));
     const startIndex = (currentPage - 1) * limit;
     const paginatedUsers = filteredUsers.slice(startIndex, startIndex + limit);
     setUsers(paginatedUsers);
-  }, [allUsers, debouncedSearchTerm, currentPage]);
+  }, [allUsers, searchTerm, currentPage]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -72,11 +61,6 @@ const useUserManagement = (
       console.error('Error deleting user:', error);
       toast.error('Failed to delete user');
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    navigate('/login');
   };
 
   const handleAddUser = async (newUser: Partial<User>) => {
@@ -116,7 +100,6 @@ const useUserManagement = (
     handleSearchChange,
     handlePageChange,
     handleDelete,
-    handleLogout,
     handleAddUser,
     handleUpdateUser,
   };
