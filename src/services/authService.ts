@@ -8,9 +8,13 @@ export const authenticateUser = async (username: string, password: string) => {
       expiresInMins: 60,
     });
     return response.data;
-  } catch (error) {
-    console.error('Error logging in:', error);
-    throw new Error('An error occurred. Please try again later.');
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string } } };
+    const errorMessage =
+      axiosError.response?.data?.message ||
+      'An error occurred. Please try again later.';
+    console.error('Error logging in:', errorMessage);
+    throw new Error(errorMessage);
   }
 };
 
@@ -22,8 +26,12 @@ export const getCurrentUser = async (accessToken: string) => {
       },
     });
     return response.data;
-  } catch (error) {
-    console.error('Error fetching current user:', error);
-    throw new Error('An error occurred. Please try again later.');
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string } } };
+    const errorMessage =
+      axiosError.response?.data?.message ||
+      'An error occurred. Please try again later.';
+    console.error('Error fetching current user:', errorMessage);
+    throw new Error(errorMessage);
   }
 };
